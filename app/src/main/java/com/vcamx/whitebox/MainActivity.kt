@@ -38,7 +38,9 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             text = "Hello $name!",
             modifier = modifier
         )
-        Button(onClick = { /* Do something */ }) {
+        Button(onClick = {
+            val userList = WhiteBoxCore.get().users
+        }) {
             Text(text = "Click me")
         }
     }

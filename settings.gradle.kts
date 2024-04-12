@@ -3,6 +3,10 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven {
+            url = uri("https://jitpack.io")
+        }
+
     }
 }
 dependencyResolutionManagement {
@@ -15,4 +19,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "WhiteBox"
 include(":app")
-include(":nativelib")
+include(":WCore")
+include(":WCore")
+include(":xposed")
+include(":mylibrary")
