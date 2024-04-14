@@ -1,8 +1,8 @@
 package com.vcamx.whitebox.client.frameworks
 
 import android.os.RemoteException
-import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.util.concurrent.ServiceManager
 import com.vcamx.whitebox.WhiteBoxCore
+import com.vcamx.whitebox.server.ServiceManager
 import com.vcamx.whitebox.server.user.IWUserManagerService
 import com.vcamx.whitebox.server.user.WUserInfo
 
@@ -13,7 +13,7 @@ class WUserManager {
 
     fun createUser(userId: Int): WUserInfo? {
         try {
-            return service.createUser(userId)
+            return getService()!!.createUser(userId)
         } catch (e: RemoteException) {
             e.printStackTrace()
         }
@@ -22,7 +22,7 @@ class WUserManager {
 
     fun deleteUser(userId: Int) {
         try {
-            service.deleteUser(userId)
+            getService()!!.deleteUser(userId)
         } catch (e: RemoteException) {
             e.printStackTrace()
         }
@@ -33,7 +33,7 @@ class WUserManager {
     val users: List<WUserInfo>
         get() {
             try {
-                return service.getUsers()
+                return getService()!!.getUsers()
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }

@@ -10,7 +10,7 @@ class ProviderCall {
     companion object {
         fun callSafely(authority: String, methodName: String, arg: String?, bundle: Bundle?): Bundle? {
             return try {
-                call(authority, WhiteBoxCore.get().getContext(), methodName, arg, bundle, 5)
+                call(authority, WhiteBoxCore.getContext(), methodName, arg, bundle, 5)
             } catch (e: IllegalAccessException) {
                 e.printStackTrace()
                 null

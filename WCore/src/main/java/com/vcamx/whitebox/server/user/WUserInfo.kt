@@ -3,7 +3,7 @@ package com.vcamx.whitebox.server.user
 import android.os.Parcel
 import android.os.Parcelable
 
-class WUserInfo : Parcelable {
+class WUserInfo(`in`: Parcel) : Parcelable {
     var id: Int = 0
     var status: BUserStatus? = null
     var name: String? = null
@@ -20,7 +20,7 @@ class WUserInfo : Parcelable {
         dest.writeLong(this.createTime)
     }
 
-    protected constructor(`in`: Parcel) {
+    init {
         this.id = `in`.readInt()
         val tmpStatus = `in`.readInt()
         this.status = if (tmpStatus == -1) null else BUserStatus.values().get(tmpStatus)
@@ -38,6 +38,7 @@ class WUserInfo : Parcelable {
     }
 
     companion object {
+        @JvmField
         val CREATOR: Parcelable.Creator<WUserInfo?> = object : Parcelable.Creator<WUserInfo?> {
             override fun createFromParcel(source: Parcel): WUserInfo? {
                 return WUserInfo(source)

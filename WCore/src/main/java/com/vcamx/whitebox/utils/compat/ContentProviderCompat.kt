@@ -21,7 +21,7 @@ class ContentProviderCompat {
             retryCount: Int
         ): Bundle? {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                return context.contentResolver.call(uri!!, method!!, arg, extras)
+                return context.contentResolver.call(uri, method!!, arg, extras)
             }
             val client: ContentProviderClient? = acquireContentProviderClientRetry(
                     context,

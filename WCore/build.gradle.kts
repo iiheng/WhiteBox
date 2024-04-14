@@ -8,7 +8,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -50,6 +50,9 @@ android {
                     "src\\main\\aidl",
                     "src\\main\\aidl\\3", "src\\main\\aidl", "src\\main\\aidl\\2"
                 )
+            }
+            java {
+                srcDirs("src\\main\\java", "src\\main\\java\\mirror")
             }
         }
     }
