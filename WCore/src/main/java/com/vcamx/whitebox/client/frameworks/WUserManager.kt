@@ -8,7 +8,7 @@ import com.vcamx.whitebox.server.user.WUserInfo
 
 
 
-class WUserManager {
+object WUserManager {
     private var mService: IWUserManagerService? = null
 
     fun createUser(userId: Int): WUserInfo? {
@@ -48,11 +48,4 @@ class WUserManager {
         return getService()
     }
 
-
-    companion object {
-        private val sUserManager = WUserManager()
-        fun get(): WUserManager {
-            return sUserManager
-        }
-    }
 }

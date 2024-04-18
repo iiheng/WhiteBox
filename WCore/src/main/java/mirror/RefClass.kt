@@ -8,7 +8,7 @@ import kotlin.reflect.KClass
 object RefClass {
     private val refTypes = hashMapOf<KClass<*>, Constructor<*>>(
         RefObject::class to  RefObject::class.java.getConstructor(Class::class.java, Field::class.java),
-        RefMethod::class to  RefMethod::class.java.getConstructor(Class::class.java, Field::class.java),
+//        RefMethod::class to  RefMethod::class.java.getConstructor(Class::class.java, Field::class.java),
         RefInt::class to  RefInt::class.java.getConstructor(Class::class.java, Field::class.java),
         RefLong::class to  RefLong::class.java.getConstructor(Class::class.java, Field::class.java),
         RefFloat::class to  RefFloat::class.java.getConstructor(Class::class.java, Field::class.java),

@@ -3,6 +3,11 @@ package com.vcamx.whitebox.utils
 import java.io.*
 
 object FileUtils {
+
+    fun mkdirs(path: File) {
+        if (!path.exists()) path.mkdirs()
+    }
+
     fun deleteDir(dir: File): Int {
         var count = 0
         if (dir.isDirectory) {
@@ -64,4 +69,22 @@ object FileUtils {
             }
         }
     }
+
+    @Throws(IOException::class)
+    fun toByteArray(file: File): ByteArray {
+        FileInputStream(file).use { fileInputStream ->
+            return toByteArray(fileInputStream)
+        }
+    }
+
+    fun toByteArray(inStream: InputStream): ByteArray {
+        val swapStream = ByteArrayOutputStream()
+        val buff = ByteArray(100)
+        var rc: Int
+        while (inStream.read(buff, 0, 100).also { rc = it } > 0) {
+            swapStream.write(buff, 0, rc)
+        }
+        return swapStream.toByteArray()
+    }
+
 }

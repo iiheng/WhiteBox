@@ -3,6 +3,7 @@ package com.vcamx.whitebox
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.os.IBinder
@@ -11,10 +12,11 @@ import com.vcamx.wcore.R
 import com.vcamx.whitebox.WEnvironment.JUNIT_JAR
 import com.vcamx.whitebox.client.ClientConfiguration
 import com.vcamx.whitebox.client.StubManifest
+import com.vcamx.whitebox.client.frameworks.WPackageManager
 import com.vcamx.whitebox.client.frameworks.WUserManager
 import com.vcamx.whitebox.client.hook.AppLifecycleCallback
-import com.vcamx.whitebox.client.hook.delegate.ContentProviderDelegate
 import com.vcamx.whitebox.server.DaemonService
+import com.vcamx.whitebox.server.ServiceManager
 import com.vcamx.whitebox.server.user.WUserInfo
 import com.vcamx.whitebox.utils.FileUtils
 import com.vcamx.whitebox.utils.ShellUtils
@@ -27,9 +29,10 @@ import java.io.IOException
 import java.io.InputStream
 
 class WhiteBoxCore : ClientConfiguration() {
+    private lateinit var mClientConfiguration: ClientConfiguration
 
     private val mServices: MutableMap<String, IBinder> = HashMap()
-    private var mClientConfiguration: ClientConfiguration? = null
+
     private var mProcessType: ProcessType? = null
     private var mAppLifecycleCallback: AppLifecycleCallback = AppLifecycleCallback
     companion object {
@@ -63,6 +66,18 @@ class WhiteBoxCore : ClientConfiguration() {
         fun getContext(): Context {
             return sContext!!
         }
+
+        fun getWPackageManager(): WPackageManager {
+            return WPackageManager
+        }
+
+        fun getPackageManager(): PackageManager {
+            return sContext!!.getPackageManager()
+        }
+
+//        fun mainThread(): Object {
+//            return ActivityThread.currentActivityThread.call()
+//        }
 //        fun setXPEnable(enable: Boolean) {
 //            BXposedManager.get().setXPEnable(enable)
 //        }
@@ -91,7 +106,7 @@ class WhiteBoxCore : ClientConfiguration() {
     }
 
     override fun getHostPackageName(): String {
-        return mClientConfiguration?.getHostPackageName() ?: ""
+        return mClientConfiguration.getHostPackageName()
     }
 
     fun get(): WhiteBoxCore {
@@ -99,7 +114,7 @@ class WhiteBoxCore : ClientConfiguration() {
     }
 
     fun getUsers(): List<WUserInfo> {
-        return WUserManager.get().users
+        return WUserManager.users
     }
 
     fun getService(name: String): IBinder {
@@ -150,19 +165,28 @@ class WhiteBoxCore : ClientConfiguration() {
     }
     fun doCreate() {
         // fix contentProvider
-        if (isVirtualProcess()) {
-            ContentProviderDelegate.init()
-        }
+//        if (isVirtualProcess()) {
+//            ContentProviderDelegate.init()
+//        }
         if (!isServerProcess()) {
             initService()
         }
     }
+
+    fun initService(){
+        get().getService(ServiceManager.ACTIVITY_MANAGER)
+        get().getService(ServiceManager.PACKAGE_MANAGER)
+        get().getService(ServiceManager.STORAGE_MANAGER)
+        get().getService(ServiceManager.JOB_MANAGER)
+        get().getService(ServiceManager.JOB_MANAGER)
+    }
+
     fun isVirtualProcess(): Boolean {
         return mProcessType == ProcessType.BAppClient
     }
     private fun initJarEnv() {
         try {
-            val open: InputStream = getContext().getAssets().open("junit.jar")
+            val open: InputStream = getContext().assets.open("junit.jar")
             FileUtils.copyFile(open, JUNIT_JAR)
         } catch (e: IOException) {
             e.printStackTrace()
